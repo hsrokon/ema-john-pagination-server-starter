@@ -32,11 +32,16 @@ async function run() {
 
     app.get('/products', async(req, res) => {
 
-      console.log('pagination query', req.query);
+      const size = parseInt(req.query.size);
+      const page = parseInt(req.query.page);
+      console.log(page, size);
       
-
-        const result = await productCollection.find().toArray();
-        res.send(result);
+     
+      const result = await productCollection.find()
+      .skip( page * size )
+      .limit( size )
+      .toArray();
+      res.send(result);
     })
 
     app.get('/productsCount', async(req, res)=> {
